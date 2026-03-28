@@ -3,10 +3,10 @@ schemaVersion = "0.0.1"
 
 [package]
 namespace = "adamant"
-name = "TODO_ModName"
-description = "TODO: Short description of the mod"
+name = "RunModsWorld"
+description = "TODO: description for RunModsWorld"
 versionNumber = "0.0.1"
-websiteUrl = "https://github.com/h2-modpack/h2-modpack-TODO_ModName"
+websiteUrl = "https://github.com/h2pack-speedrun/RunModsWorld"
 containsNsfwContent = false
 
 [package.dependencies]

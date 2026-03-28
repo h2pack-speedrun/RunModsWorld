@@ -37,7 +37,7 @@ public.config = config
 
 local _, revert = lib.createBackupSystem()
 
-local PACK_ID = error("FILL: set PACK_ID to your pack id")
+local PACK_ID = "speedrun"
 
 -- =============================================================================
 -- FILL: Module definition
