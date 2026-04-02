@@ -13,14 +13,12 @@ lib = rom.mods['adamant-ModpackLib']
 config = chalk.auto('config.lua')
 public.config = config
 
-backup, revert = lib.createBackupSystem()
-
 -- Behavior registration tables — populated by each behaviors/*.lua file via import().
 -- Each behavior file may append to any of these independently:
---   apply_fns : sequence of { key=string, fn=function }  — called on apply, gated on config[key]
+--   patch_fns : sequence of { key=string, fn=function(plan) } — called on patchPlan, gated on config[key]
 --   hook_fns  : sequence of functions                    — called once on load to register hooks
 --   option_fns: sequence of option descriptors           — drives the Framework UI options list
-apply_fns  = {}
+patch_fns  = {}
 hook_fns   = {}
 option_fns = {}
 
@@ -43,17 +41,19 @@ public.definition = {
     group        = "World & Combat Tweaks",
     tooltip      = "Run modifier options for world structure and combat tweaks.",
     default      = true,
-    dataMutation = true,
+    affectsRunData = true,
     options      = option_fns,
 }
+
+public.store = lib.createStore(config, public.definition)
 
 -- =============================================================================
 -- MODULE LOGIC
 -- =============================================================================
 
-local function apply()
-    for _, b in ipairs(apply_fns) do
-        if config[b.key] and b.fn then b.fn() end
+local function buildPatchPlan(plan)
+    for _, b in ipairs(patch_fns) do
+        if config[b.key] and b.fn then b.fn(plan) end
     end
 end
 
@@ -65,22 +65,25 @@ end
 -- Wiring
 -- =============================================================================
 
-public.definition.apply = apply
-public.definition.revert = revert
+public.definition.patchPlan = buildPatchPlan
 
 local loader = reload.auto_single()
 
+local function init()
+    import_as_fallback(rom.game)
+    registerHooks()
+    if lib.isEnabled(public.store, public.definition.modpack) then
+        lib.applyDefinition(public.definition, public.store)
+    end
+    if public.definition.affectsRunData and not lib.isCoordinated(public.definition.modpack) then
+        SetupRunData()
+    end
+end
+
 modutil.once_loaded.game(function()
-    loader.load(function()
-        import_as_fallback(rom.game)
-        registerHooks()
-        if lib.isEnabled(config, public.definition.modpack) then apply() end
-        if public.definition.dataMutation and not lib.isCoordinated(public.definition.modpack) then
-            SetupRunData()
-        end
-    end)
+    loader.load(init, init)
 end)
 
-local uiCallback = lib.standaloneUI(public.definition, config, apply, revert)
+local uiCallback = lib.standaloneUI(public.definition, public.store)
 ---@diagnostic disable-next-line: redundant-parameter
 rom.gui.add_to_menu_bar(uiCallback)

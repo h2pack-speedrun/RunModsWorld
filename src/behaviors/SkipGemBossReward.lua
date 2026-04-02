@@ -10,7 +10,7 @@ table.insert(option_fns,
 
 table.insert(hook_fns, function()
     modutil.mod.Path.Wrap("UnusedWeaponBonusDropGems", function(baseFunc, source, args)
-        if not config.SkipGemBossReward or not lib.isEnabled(config, public.definition.modpack) then
+        if not config.SkipGemBossReward or not lib.isEnabled(public.store, public.definition.modpack) then
             return baseFunc(source, args)
         end
         return

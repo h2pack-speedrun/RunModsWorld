@@ -10,7 +10,7 @@ table.insert(option_fns,
 
 table.insert(hook_fns, function()
     modutil.mod.Path.Wrap("DionysusSkipTrait", function(baseFunc, args, traitData)
-        if not config.EscalatingFigLeaf or not lib.isEnabled(config, public.definition.modpack) then
+        if not config.EscalatingFigLeaf or not lib.isEnabled(public.store, public.definition.modpack) then
             return baseFunc(args, traitData)
         end
         baseFunc(args, traitData)
@@ -24,7 +24,7 @@ table.insert(hook_fns, function()
     end)
 
     modutil.mod.Path.Wrap("EndEncounterEffects", function(baseFunc, currentRun, currentRoom, currentEncounter)
-        if not config.EscalatingFigLeaf or not lib.isEnabled(config, public.definition.modpack) then
+        if not config.EscalatingFigLeaf or not lib.isEnabled(public.store, public.definition.modpack) then
             return baseFunc(currentRun, currentRoom, currentEncounter)
         end
         baseFunc(currentRun, currentRoom, currentEncounter)
@@ -40,7 +40,7 @@ table.insert(hook_fns, function()
     end)
 
     modutil.mod.Path.Wrap("StartRoom", function(baseFunc, currentRun, currentRoom)
-        if not config.EscalatingFigLeaf or not lib.isEnabled(config, public.definition.modpack) then
+        if not config.EscalatingFigLeaf or not lib.isEnabled(public.store, public.definition.modpack) then
             return baseFunc(currentRun, currentRoom)
         end
         baseFunc(currentRun, currentRoom)
