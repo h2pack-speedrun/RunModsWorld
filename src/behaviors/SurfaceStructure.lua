@@ -1,3 +1,8 @@
+local internal = RunModsWorldInternal
+local option_fns = internal.option_fns
+local patch_fns = internal.patch_fns
+local hook_fns = internal.hook_fns
+
 table.insert(option_fns,
     {
         type = "checkbox",
@@ -51,7 +56,7 @@ table.insert(patch_fns, {
 
 table.insert(hook_fns, function()
     modutil.mod.Path.Wrap("ChooseEncounter", function(baseFunc, currentRun, room, args)
-        if not config.SurfaceStructure or not lib.isEnabled(public.store, public.definition.modpack) then
+        if not store.read("SurfaceStructure") or not lib.isEnabled(store, public.definition.modpack) then
             return baseFunc(currentRun, room, args)
         end
         args = args or {}

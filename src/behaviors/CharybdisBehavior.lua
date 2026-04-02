@@ -1,3 +1,7 @@
+local internal = RunModsWorldInternal
+local option_fns = internal.option_fns
+local patch_fns = internal.patch_fns
+
 table.insert(option_fns,
     {
         type = "checkbox",
