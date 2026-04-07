@@ -9,6 +9,7 @@ modutil = mods['SGG_Modding-ModUtil']
 chalk = mods['SGG_Modding-Chalk']
 reload = mods['SGG_Modding-ReLoad']
 lib = rom.mods['adamant-ModpackLib']
+local dataDefaults = import("config.lua")
 local config = chalk.auto('config.lua')
 
 RunModsWorldInternal = RunModsWorldInternal or {}
@@ -24,6 +25,29 @@ internal.hook_fns = internal.hook_fns or {}
 internal.option_fns = internal.option_fns or {}
 
 local PACK_ID = "speedrun"
+
+local function BuildStorageAndUi(options)
+    local storage = {}
+    local ui = {}
+    for _, option in ipairs(options) do
+        if option.type == "checkbox" then
+            table.insert(storage, {
+                type = "bool",
+                alias = option.configKey,
+                configKey = option.configKey,
+            })
+            table.insert(ui, {
+                type = "checkbox",
+                binds = { value = option.configKey },
+                label = option.label,
+                tooltip = option.tooltip,
+            })
+        else
+            error(("Unsupported option type '%s' in %s"):format(tostring(option.type), PACK_ID .. ".RunModsWorld"))
+        end
+    end
+    return storage, ui
+end
 
 import 'behaviors/CharybdisBehavior.lua'
 import 'behaviors/EscalatingFigLeaf.lua'
@@ -43,10 +67,11 @@ public.definition = {
     tooltip      = "Run modifier options for world structure and combat tweaks.",
     default      = true,
     affectsRunData = true,
-    options      = internal.option_fns,
 }
 
-public.store = lib.createStore(config, public.definition)
+public.definition.storage, public.definition.ui = BuildStorageAndUi(internal.option_fns)
+
+public.store = lib.createStore(config, public.definition, dataDefaults)
 store = public.store
 
 -- =============================================================================
