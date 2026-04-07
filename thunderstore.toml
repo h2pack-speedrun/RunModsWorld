@@ -4,7 +4,7 @@ schemaVersion = "0.0.1"
 [package]
 namespace = "adamant"
 name = "Speedrun_RunModsWorld"
-description = "TODO: description for RunModsWorld"
+description = "Provides several adjustments to biome structure and the Fig Leaf Keepsake."
 versionNumber = "0.0.1"
 websiteUrl = "https://github.com/h2pack-speedrun/adamant-Speedrun_RunModsWorld"
 containsNsfwContent = false

@@ -63,9 +63,9 @@ public.definition = {
     id           = "RunModsWorld",
     name         = "Run Modifiers: World & Combat Tweaks",
     category     = "Run Modifiers",
-    group        = "World & Combat Tweaks",
+    subgroup     = "World & Combat Tweaks",
     tooltip      = "Run modifier options for world structure and combat tweaks.",
-    default      = true,
+    default      = dataDefaults.Enabled,
     affectsRunData = true,
 }
 
@@ -114,4 +114,3 @@ end)
 local uiCallback = lib.standaloneUI(public.definition, store)
 ---@diagnostic disable-next-line: redundant-parameter
 rom.gui.add_to_menu_bar(uiCallback)
-
