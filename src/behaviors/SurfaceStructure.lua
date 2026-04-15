@@ -56,7 +56,7 @@ table.insert(patch_fns, {
 
 table.insert(hook_fns, function()
     modutil.mod.Path.Wrap("ChooseEncounter", function(baseFunc, currentRun, room, args)
-        if not store.read("SurfaceStructure") or not lib.isEnabled(store, public.definition.modpack) then
+        if not store.read("SurfaceStructure") or not lib.coordinator.isEnabled(store, public.definition.modpack) then
             return baseFunc(currentRun, room, args)
         end
         args = args or {}
